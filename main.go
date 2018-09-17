@@ -3,16 +3,18 @@ package main
 import (
 	"os"
 
+	"path"
+
 	git "gopkg.in/src-d/go-git.v4"
 )
 
 func main() {
-
-	info("git clone https://github.com/src-d/go-git")
-	_, err := git.PlainClone("/tmp/foo", false, &git.CloneOptions{
+	input := "github.com/src-d/go-git"
+	info(nil, "git clone https://github.com/src-d/go-git")
+	_, err := git.PlainClone(path.Join(os.Getenv("GOPATH"), "src", input), false, &git.CloneOptions{
 		URL:      "https://github.com/src-d/go-git",
-		Progress: os.Stdout,
+		Progress: nil,
 	})
 
-	checkIfError(err)
+	checkIfError(os.Stderr, err)
 }
