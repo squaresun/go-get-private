@@ -1,18 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"os"
 )
 
-// Output txt on console
-type writer interface {
-	io.Writer
-}
+var verbose = flag.Bool("v", false, "Verbose output, i.e. print out progress")
 
 // checkIfError should be used to naively panics if an error is not nil.
-func checkIfError(w writer, err error) {
+func checkIfError(err error) {
 	if err == nil {
 		return
 	}
@@ -22,6 +20,10 @@ func checkIfError(w writer, err error) {
 }
 
 // info should be used to describe the example commands that are about to run.
-func info(w writer, format string, args ...interface{}) {
+func info(w io.Writer, format string, args ...interface{}) {
+	if w == nil {
+		return
+	}
+
 	w.Write([]byte(fmt.Sprintf("\x1b[34;1m%s\x1b[0m\n", fmt.Sprintf(format, args...))))
 }
